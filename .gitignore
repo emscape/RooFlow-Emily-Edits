@@ -1,0 +1,11 @@
+memory-bank/
+dev/
+.vscode
+.roomodes
+.roo/
+node_modules/
+package-lock.json
+package.json
+!config/
+.rooignore
+!config/.rooignore
