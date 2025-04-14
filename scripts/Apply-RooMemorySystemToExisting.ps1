@@ -153,6 +153,59 @@ if (-not (Test-Path -Path $mcpConfigPath -PathType Leaf)) {
 }
 
 
+# --- Custom Modes File Handling ---
+
+# Define path for the source .roomodes file (assuming script runs from repo root or similar structure)
+# Adjust this path based on the actual location relative to this script
+$sourceRoomodesPath = Join-Path -Path $PSScriptRoot -ChildPath "..\RooCorePackage\.roomodes" 
+
+# Define path for the target .roomodes file in the project
+$targetRoomodesPath = Join-Path -Path $ProjectPath -ChildPath ".roomodes"
+
+if (Test-Path -Path $sourceRoomodesPath -PathType Leaf) {
+    if (-not (Test-Path -Path $targetRoomodesPath -PathType Leaf)) {
+        Write-Host "Copying default .roomodes file to project root: $targetRoomodesPath"
+        Copy-Item -Path $sourceRoomodesPath -Destination $targetRoomodesPath -Force
+    } else {
+        Write-Host ".roomodes file already exists in project: $targetRoomodesPath. Checking for missing modes..."
+        try {
+            # Read source and target files
+            $sourceModesContent = Get-Content -Path $sourceRoomodesPath -Raw | ConvertFrom-Json -ErrorAction Stop
+            $targetModesContent = Get-Content -Path $targetRoomodesPath -Raw | ConvertFrom-Json -ErrorAction Stop
+
+            # Check if customModes array exists in both
+            if (($null -ne $sourceModesContent) -and ($sourceModesContent.PSObject.Properties.Name -contains 'customModes') -and `
+                ($null -ne $targetModesContent) -and ($targetModesContent.PSObject.Properties.Name -contains 'customModes') -and `
+                ($sourceModesContent.customModes -is [array]) -and ($targetModesContent.customModes -is [array])) {
+                
+                $targetSlugs = $targetModesContent.customModes | ForEach-Object { $_.slug }
+                $modesToAdd = $sourceModesContent.customModes | Where-Object { $_.slug -notin $targetSlugs }
+
+                if ($modesToAdd.Count -gt 0) {
+                    Write-Host "Adding $($modesToAdd.Count) missing modes from the package to the existing .roomodes file..."
+                    # Add the new modes to the existing array
+                    $updatedModes = $targetModesContent.customModes + $modesToAdd
+                    $targetModesContent.customModes = $updatedModes
+                    
+                    # Save the updated content back to the file
+                    $targetModesContent | ConvertTo-Json -Depth 10 | Out-File -FilePath $targetRoomodesPath -Encoding UTF8 -Force
+                    Write-Host "Successfully added missing modes."
+                } else {
+                    Write-Host "No new modes found in the package version to add."
+                }
+            } else {
+                 Write-Warning "Could not compare .roomodes files. Ensure both files are valid JSON and contain a 'customModes' array."
+            }
+        } catch {
+            Write-Error "Failed to read or parse .roomodes files. Error: $($_.Exception.Message)"
+        }
+    }
+} else {
+    Write-Warning "Source .roomodes file not found at expected location: $sourceRoomodesPath. Cannot copy or update custom modes."
+}
+
+
+
 # --- Future Migration Steps Placeholder ---
 Write-Host "Initial structure check/creation complete."
 Write-Host "TODO: Integrate migration tools for analysis and retroactive tagging of existing memory bank entries."

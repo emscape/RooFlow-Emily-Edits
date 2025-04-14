@@ -1,0 +1,39 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "basePath": "<Specify base path if needed, e.g., project root or specific data folder>",
+      "description": "Provides access to the local filesystem.",
+      "enabled": true,
+      "allowedTools": [
+        "readFile",
+        "writeFile",
+        "listFiles",
+        "createDirectory",
+        "itemExists"
+      ]
+    },
+    "git": {
+      "credentialsEnvVar": "GIT_PAT",
+      "repoPath": "<Specify path to the Git repository, defaults to project root if empty>",
+      "description": "Provides Git repository operations.",
+      "enabled": true,
+      "allowedTools": [
+        "gitStatus",
+        "gitAdd",
+        "gitCommit",
+        "gitPull",
+        "gitLog",
+        "gitDiff",
+        "gitClone"
+      ]
+    },
+    "braveSearch": {
+      "apiKeyEnvVar": "BRAVE_SEARCH_API_KEY",
+      "description": "Provides web search capabilities via Brave Search API.",
+      "enabled": true,
+      "allowedTools": [
+        "search"
+      ]
+    }
+  }
+}

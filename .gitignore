@@ -1,16 +1,25 @@
-memory-bank/
+# Standard ignores
 dev/
-.vscode
-.roomodes
-.roo/
+.vscode/
 node_modules/
 package-lock.json
 package.json
-!config/
-.rooignore
-!config/.rooignore
-.windsurfrules
 insert-variables.sh
-.clinerules-default
 rooflow_logo_raw.png
-!/config/default-mode/.clinerules-default
+
+# Secrets
+.env
+
+# Ensure config directory is tracked
+!config/
+
+# Removed ignores for Roo files below to ensure they are tracked:
+# memory-bank/
+# .roomodes
+# .roo/
+# .rooignore
+# .windsurfrules
+# .clinerules-default
+# Removed redundant negations:
+# !config/.rooignore
+# !/config/default-mode/.clinerules-default

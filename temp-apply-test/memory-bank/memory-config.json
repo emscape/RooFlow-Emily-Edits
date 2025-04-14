@@ -1,0 +1,22 @@
+{
+  "activeProjects": [],
+  "projectMetadata": {
+    "TestProject": {
+      "status": "completed",
+      "completionDate": "2025-03-29T22:13:16Z"
+    }
+  },
+  "completedProjects": [
+    "TestProject"
+  ],
+  "loadSettings": {
+    "maxEntriesPerFile": 50,
+    "loadCompletedProjects": false,
+    "prioritizeActive": true
+  },
+  "archiveSettings": {
+    "keepCompletedDays": 14,
+    "archiveOnUMB": true,
+    "autoArchiveCompleted": true
+  }
+}
