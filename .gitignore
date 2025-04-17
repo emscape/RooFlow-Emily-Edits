@@ -12,6 +12,8 @@ rooflow_logo_raw.png
 
 # Ensure config directory is tracked
 !config/
+!config/.rooignore
+!/config/default-mode/.clinerules-default
 
 # Removed ignores for Roo files below to ensure they are tracked:
 # memory-bank/
@@ -20,6 +22,7 @@ rooflow_logo_raw.png
 # .rooignore
 # .windsurfrules
 # .clinerules-default
-# Removed redundant negations:
-# !config/.rooignore
-# !/config/default-mode/.clinerules-default
+
+# Ignore logs and temporary files
+output.log
+claude-code-prompt.txt
